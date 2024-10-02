@@ -1,0 +1,55 @@
+// Feature Selection with BorutaPy and LightGBM
+digraph {
+	fontname=Helvetica fontsize=20 rankdir=LR size="40,20!"
+	Dataset [label="Initial Dataset
+(Features: F1, F2, F3, F4, F5, ...)" color=gray40 fontcolor=white shape=box style=filled]
+	Boruta [label="BorutaPy
+(Feature Selection)" color=royalblue4 fontcolor=white shape=ellipse style=filled]
+	Boruta_Details [label="BorutaPy Details:
+    - Iteratively removes less important features
+    - Compares original features to shuffled features (shadow features)
+    - Uses LightGBM for importance scoring
+    - Stops when all features are either confirmed or rejected" color=royalblue4 fontcolor=white shape=note style=filled]
+	Boruta_Params [label="BorutaPy Hyper-Parameters:
+    - n_estimators: auto
+    - max_iter: 50
+    - perc: 100
+    - alpha: 0.05
+    - two_step: True
+    - random_state: 42
+    - verbose: 2" color=royalblue4 fontcolor=white shape=box style=filled]
+	Shadow [label="Shadow Features
+(Shuffled versions of original features)" color=gold4 fontcolor=white shape=box style=filled]
+	LightGBM [label="LightGBM
+(Classifier)" color=forestgreen fontcolor=white shape=ellipse style=filled]
+	LightGBM_Details [label="LightGBM Details:
+    - Gradient Boosting Decision Tree (GBDT) algorithm
+    - Efficient training with large datasets
+    - Handles categorical features without one-hot encoding
+    - Provides feature importance scores" color=forestgreen fontcolor=white shape=note style=filled]
+	LightGBM_Params [label="LightGBM Hyper-Parameters:
+    - boosting_type: gbdt
+    - objective: binary
+    - metric: binary_logloss
+    - class_weight: balanced
+    - learning_rate: 0.5
+    - max_depth: 10
+    - num_leaves: 50
+    - min_child_samples: 20
+    - subsample: 0.8
+    - colsample_bytree: 0.8
+    - reg_alpha: 0.5
+    - reg_lambda: 0.5
+    - n_estimators: 100" color=forestgreen fontcolor=white shape=box style=filled]
+	Selected [label="Selected Features
+(F1, F2, F3, ...)" color=firebrick4 fontcolor=white shape=box style=filled]
+	Dataset -> Boruta [label="Feature Input" color=black style=solid]
+	Boruta -> Boruta_Details [label=Details color=royalblue4 style=solid]
+	Boruta -> Boruta_Params [label="Hyper-Parameters" color=royalblue4 style=solid]
+	Boruta -> Shadow [label="Generate Shadow Features" color=orange style=solid]
+	Shadow -> LightGBM [label="Include Shadow Features" color=orange style=solid]
+	Boruta -> LightGBM [label="Feature Importance" color=blue style=solid]
+	LightGBM -> LightGBM_Details [label=Details color=forestgreen style=solid]
+	LightGBM -> LightGBM_Params [label="Hyper-Parameters" color=forestgreen style=solid]
+	LightGBM -> Selected [label="Important Features" color=green style=solid]
+}
